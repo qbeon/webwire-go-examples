@@ -18,6 +18,7 @@ import (
 // Socket implements the webwire.Socket interface using
 // the gorilla/websocket library
 type Socket struct {
+	serverAddr  url.URL
 	connected   bool
 	lock        *sync.Mutex
 	readLock    *sync.Mutex
@@ -44,13 +45,13 @@ func NewConnectedSocket(conn *websocket.Conn) *Socket {
 }
 
 // Dial implements the webwire.Socket interface
-func (sock *Socket) Dial(serverAddr url.URL, deadline time.Time) (err error) {
+func (sock *Socket) Dial(deadline time.Time) (err error) {
 	sock.lock.Lock()
 	if sock.connected {
 		sock.lock.Unlock()
 		return errors.New("already connected")
 	}
-	connection, _, err := sock.dialer.Dial(serverAddr.String(), nil)
+	connection, _, err := sock.dialer.Dial(sock.serverAddr.String(), nil)
 	if err != nil {
 		sock.lock.Unlock()
 		return wwrerr.DisconnectedErr{

@@ -21,6 +21,9 @@ type TLS struct {
 
 // Transport implements the webwire transport layer with gorilla/websocket
 type Transport struct {
+	// Host defines the address of the host
+	Host string
+
 	// OnOptions is invoked when the websocket endpoint is examined by the
 	// client using the HTTP OPTION method.
 	OnOptions func(resp http.ResponseWriter, req *http.Request)

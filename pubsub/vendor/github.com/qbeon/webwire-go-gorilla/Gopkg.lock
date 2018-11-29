@@ -27,7 +27,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:822f06753ba1dabe71c6a6056e28176d0824c9a5747a4d1636bbd7811b325f6f"
+  digest = "1:a3a0a00f8dff84cb11a7a2cfbac03e6888d311676c967b908d1a373686413812"
   name = "github.com/qbeon/webwire-go"
   packages = [
     ".",
@@ -37,7 +37,7 @@
     "wwrerr",
   ]
   pruneopts = "UT"
-  revision = "3d5e6caafbd0652c091dccec5794df631b589f89"
+  revision = "9ab03dd58a5a534710527dbf16e4dedafe365e33"
 
 [[projects]]
   digest = "1:c40d65817cdd41fac9aa7af8bed56927bb2d6d47e4fea566a74880f5c2b1c41e"
@@ -67,6 +67,7 @@
     "github.com/qbeon/webwire-go/connopt",
     "github.com/qbeon/webwire-go/message",
     "github.com/qbeon/webwire-go/wwrerr",
+    "github.com/stretchr/testify/require",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

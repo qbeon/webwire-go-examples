@@ -1,6 +1,7 @@
 package gorilla
 
 import (
+	"net/url"
 	"sync"
 	"time"
 
@@ -11,6 +12,9 @@ import (
 // ClientTransport implements the webwire client transport layer with
 // gorilla/websocket
 type ClientTransport struct {
+	// ServerAddress specifies the server address URL
+	ServerAddress url.URL
+
 	// Upgrader specifies the websocket connection upgrader
 	Dialer websocket.Dialer
 }
@@ -22,12 +26,20 @@ func (cltTrans *ClientTransport) NewSocket(
 	// Reset handshake timeout to client-enforced dial timeout
 	cltTrans.Dialer.HandshakeTimeout = dialTimeout
 
+	serverAddr := cltTrans.ServerAddress
+	if serverAddr.Scheme == "https" {
+		serverAddr.Scheme = "wss"
+	} else {
+		serverAddr.Scheme = "ws"
+	}
+
 	sock := &Socket{
-		connected: false,
-		lock:      &sync.Mutex{},
-		readLock:  &sync.Mutex{},
-		writeLock: &sync.Mutex{},
-		dialer:    cltTrans.Dialer,
+		serverAddr: serverAddr,
+		connected:  false,
+		lock:       &sync.Mutex{},
+		readLock:   &sync.Mutex{},
+		writeLock:  &sync.Mutex{},
+		dialer:     cltTrans.Dialer,
 	}
 
 	sock.writerIface = writerInterface{sock: sock}

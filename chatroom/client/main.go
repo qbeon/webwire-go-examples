@@ -73,7 +73,6 @@ func NewChatroomClient(serverAddr url.URL) (*ChatroomClient, error) {
 
 	// Initialize connection
 	connection, err := wwrclt.NewClient(
-		serverAddr,
 		newChatroomClient,
 		wwrclt.Options{
 			// Default timeout for timed requests
@@ -98,7 +97,10 @@ func NewChatroomClient(serverAddr url.URL) (*ChatroomClient, error) {
 				log.Ldate|log.Ltime|log.Lshortfile,
 			),
 		},
-		&wwrgorilla.ClientTransport{Dialer: dialer},
+		&wwrgorilla.ClientTransport{
+			ServerAddress: serverAddr,
+			Dialer:        dialer,
+		},
 	)
 	if err != nil {
 		return nil, err

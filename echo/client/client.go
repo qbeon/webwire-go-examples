@@ -24,14 +24,15 @@ func NewEchoClient(serverAddr url.URL) (*EchoClient, error) {
 
 	// Initialize connection
 	connection, err := wwrclt.NewClient(
-		serverAddr,
 		newEchoClient,
 		wwrclt.Options{
 			// Default timeout for timed requests
 			DefaultRequestTimeout: 10 * time.Second,
 			ReconnectionInterval:  2 * time.Second,
 		},
-		&wwrgorilla.ClientTransport{},
+		&wwrgorilla.ClientTransport{
+			ServerAddress: serverAddr,
+		},
 	)
 	if err != nil {
 		return nil, err

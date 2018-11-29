@@ -28,7 +28,7 @@ func (srv *Transport) Initialize(
 	if srv.TLS != nil {
 		scheme = "https"
 	}
-	host := options.Host
+	host := srv.Host
 	if host == "" {
 		if srv.TLS != nil {
 			host = ":https"

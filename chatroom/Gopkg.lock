@@ -27,7 +27,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:c99d716575bd9a05bb480efdb18130b0c9ce7a2a081e7f6c5d400d1ee73c8e2b"
+  digest = "1:bb0acbc2be9aa30115d73897cc0ad6f3a830a924456891679c707e78976a094c"
   name = "github.com/qbeon/webwire-go"
   packages = [
     ".",
@@ -39,15 +39,15 @@
     "wwrerr",
   ]
   pruneopts = "UT"
-  revision = "1bb6012a18912a8597e5a57cd8b641d9f847a565"
+  revision = "9ab03dd58a5a534710527dbf16e4dedafe365e33"
 
 [[projects]]
   branch = "master"
-  digest = "1:1a13a7becaab83e3a1ba426c968c15e9e769ad6372a99493f1b8edd22842336e"
+  digest = "1:2f39664121599392f269cb6a4d88d02d02492c72ac6469e05856c4d730fdda19"
   name = "github.com/qbeon/webwire-go-gorilla"
   packages = ["."]
   pruneopts = "UT"
-  revision = "ceb01774e09e9a7f1299abf135becb219d2ac5fc"
+  revision = "0b3d84d47233ed97f89759a5489022b3a33ca0e0"
 
 [[projects]]
   digest = "1:c40d65817cdd41fac9aa7af8bed56927bb2d6d47e4fea566a74880f5c2b1c41e"

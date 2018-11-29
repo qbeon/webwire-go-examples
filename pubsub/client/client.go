@@ -38,14 +38,15 @@ func NewPubSubClient(
 
 	// Initialize connection
 	connection, err := wwrclt.NewClient(
-		serverAddr,
 		newPubSubClient,
 		wwrclt.Options{
 			// Default timeout for timed requests
 			DefaultRequestTimeout: 10 * time.Second,
 			ReconnectionInterval:  2 * time.Second,
 		},
-		&wwrgorilla.ClientTransport{},
+		&wwrgorilla.ClientTransport{
+			ServerAddress: serverAddr,
+		},
 	)
 	if err != nil {
 		return nil, err
