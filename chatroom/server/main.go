@@ -4,11 +4,13 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	"github.com/gorilla/websocket"
 	wwr "github.com/qbeon/webwire-go"
 	wwrgorilla "github.com/qbeon/webwire-go-gorilla"
 )
@@ -51,6 +53,11 @@ func main() {
 				CertFilePath:       *argCertFilePath,
 				PrivateKeyFilePath: *argPrivateKeyFile,
 				Config:             nil,
+			},
+			Upgrader: &websocket.Upgrader{
+				CheckOrigin: func(req *http.Request) bool {
+					return true
+				},
 			},
 		},
 	)
