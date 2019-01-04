@@ -45,7 +45,8 @@ func main() {
 				"ERR: ",
 				log.Ldate|log.Ltime|log.Lshortfile,
 			),
-			ReadTimeout: 3 * time.Second,
+			ReadTimeout:     3 * time.Second,
+			SubProtocolName: []byte("chatroom-example-protocol"),
 		},
 		&wwrgorilla.Transport{
 			Host: *argServerAddr,
