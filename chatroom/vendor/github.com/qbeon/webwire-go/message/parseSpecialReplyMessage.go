@@ -1,12 +1,10 @@
 package message
 
-import (
-	"errors"
-)
+import "errors"
 
 // parseSpecialReplyMessage parses the following message types:
-// MsgReplyShutdown, MsgInternalError, MsgSessionNotFound,
-// MsgMaxSessConnsReached, MsgSessionsDisabled
+// MsgReplyShutdown, MsgReplyInternalError, MsgReplySessionNotFound,
+// MsgReplyMaxSessConnsReached, MsgReplySessionsDisabled
 func (msg *Message) parseSpecialReplyMessage() error {
 	if msg.MsgBuffer.len < 9 {
 		return errors.New("invalid special reply message, too short")

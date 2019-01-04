@@ -13,9 +13,9 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
+	wwrclt "github.com/qbeon/webwire-go-client"
 	"github.com/qbeon/webwire-go-examples/chatroom/shared"
 	wwrgorilla "github.com/qbeon/webwire-go-gorilla"
-	wwrclt "github.com/qbeon/webwire-go/client"
 )
 
 // loadWebwireCACertificate loads the webwire CA certificate from a file

@@ -2,7 +2,6 @@ package webwire
 
 import (
 	"github.com/qbeon/webwire-go/message"
-	"github.com/qbeon/webwire-go/wwrerr"
 )
 
 // handleSessionClosure handles session destruction requests
@@ -19,7 +18,7 @@ func (srv *server) handleSessionClosure(
 	}
 
 	if !srv.sessionsEnabled {
-		srv.failMsg(con, msg, wwrerr.SessionsDisabledErr{})
+		srv.failMsg(con, msg, ErrSessionsDisabled{})
 		finalize()
 		return
 	}
@@ -34,17 +33,6 @@ func (srv *server) handleSessionClosure(
 	// Deregister session from active sessions registry destroying it if it's
 	// the last connection left
 	srv.sessionRegistry.deregister(con, true)
-
-	// Synchronize session destruction to the client
-	if err := con.notifySessionClosed(); err != nil {
-		srv.failMsg(con, msg, nil)
-		finalize()
-		srv.errorLog.Printf("internal server error: "+
-			"couldn't notify client about the session destruction: %s",
-			err,
-		)
-		return
-	}
 
 	// Reset the session on the connection
 	con.setSession(nil)

@@ -27,17 +27,15 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:a3a0a00f8dff84cb11a7a2cfbac03e6888d311676c967b908d1a373686413812"
+  digest = "1:a5b5d5a581e8a272df2638b3eedaa74ce966c46f33c087fdef9d3dce3bff375c"
   name = "github.com/qbeon/webwire-go"
   packages = [
     ".",
-    "connopt",
     "message",
     "payload",
-    "wwrerr",
   ]
   pruneopts = "UT"
-  revision = "9ab03dd58a5a534710527dbf16e4dedafe365e33"
+  revision = "f99345781010a12e764dbe5c81497ee311b84fb8"
 
 [[projects]]
   digest = "1:c40d65817cdd41fac9aa7af8bed56927bb2d6d47e4fea566a74880f5c2b1c41e"
@@ -52,11 +50,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:5e4d81c50cffcb124b899e4f3eabec3930c73532f0096c27f94476728ba03028"
+  digest = "1:75515eedc0dc2cb0b40372008b616fa2841d831c63eedd403285ff286c593295"
   name = "golang.org/x/sync"
   packages = ["semaphore"]
   pruneopts = "UT"
-  revision = "42b317875d0fa942474b76e1b46a6060d720ae6e"
+  revision = "37e7f081c4d4c64e13b10787722085407fe5d15f"
 
 [solve-meta]
   analyzer-name = "dep"
@@ -64,9 +62,7 @@
   input-imports = [
     "github.com/gorilla/websocket",
     "github.com/qbeon/webwire-go",
-    "github.com/qbeon/webwire-go/connopt",
     "github.com/qbeon/webwire-go/message",
-    "github.com/qbeon/webwire-go/wwrerr",
     "github.com/stretchr/testify/require",
   ]
   solver-name = "gps-cdcl"

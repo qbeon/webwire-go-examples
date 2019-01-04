@@ -33,7 +33,6 @@ func main() {
 	server, err := wwr.NewServer(
 		NewChatRoomServer(),
 		wwr.ServerOptions{
-			Host: *argServerAddr,
 			WarnLog: log.New(
 				os.Stdout,
 				"WARN: ",
@@ -47,6 +46,7 @@ func main() {
 			ReadTimeout: 3 * time.Second,
 		},
 		&wwrgorilla.Transport{
+			Host: *argServerAddr,
 			TLS: &wwrgorilla.TLS{
 				CertFilePath:       *argCertFilePath,
 				PrivateKeyFilePath: *argPrivateKeyFile,

@@ -7,16 +7,16 @@ import (
 )
 
 const (
-	// MsgMinLenSignal represents the minimum length
+	// MinLenSignal represents the minimum length
 	// of binary/UTF8 encoded signal messages.
 	// binary/UTF8 signal message structure:
 	//  1. message type (1 byte)
 	//  2. name length flag (1 byte)
 	//  3. name (n bytes, optional if name length flag is 0)
 	//  4. payload (n bytes, at least 1 byte)
-	MsgMinLenSignal = int(3)
+	MinLenSignal = int(3)
 
-	// MsgMinLenSignalUtf16 represents the minimum length
+	// MinLenSignalUtf16 represents the minimum length
 	// of UTF16 encoded signal messages.
 	// UTF16 signal message structure:
 	//  1. message type (1 byte)
@@ -24,9 +24,9 @@ const (
 	//  3. name (n bytes, optional if name length flag is 0)
 	//  4. header padding (1 byte, required if name length flag is odd)
 	//  5. payload (n bytes, at least 2 bytes)
-	MsgMinLenSignalUtf16 = int(4)
+	MinLenSignalUtf16 = int(4)
 
-	// MsgMinLenRequest represents the minimum length
+	// MinLenRequest represents the minimum length
 	// of binary/UTF8 encoded request messages.
 	// binary/UTF8 request message structure:
 	//  1. message type (1 byte)
@@ -34,9 +34,9 @@ const (
 	//  3. name length flag (1 byte)
 	//  4. name (from 0 to 255 bytes, optional if name length flag is 0)
 	//  5. payload (n bytes, at least 1 byte or optional if name len > 0)
-	MsgMinLenRequest = int(11)
+	MinLenRequest = int(11)
 
-	// MsgMinLenRequestUtf16 represents the minimum length
+	// MinLenRequestUtf16 represents the minimum length
 	// of UTF16 encoded request messages.
 	// UTF16 request message structure:
 	//  1. message type (1 byte)
@@ -45,26 +45,26 @@ const (
 	//  4. name (n bytes, optional if name length flag is 0)
 	//  5. header padding (1 byte, required if name length flag is odd)
 	//  6. payload (n bytes, at least 2 bytes)
-	MsgMinLenRequestUtf16 = int(11)
+	MinLenRequestUtf16 = int(11)
 
-	// MsgMinLenReply represents the minimum length
+	// MinLenReply represents the minimum length
 	// of binary/UTF8 encoded reply messages.
 	// binary/UTF8 reply message structure:
 	//  1. message type (1 byte)
 	//  2. message id (8 bytes)
 	//  3. payload (n bytes, optional or at least 1 byte)
-	MsgMinLenReply = int(9)
+	MinLenReply = int(9)
 
-	// MsgMinLenReplyUtf16 represents the minimum length
+	// MinLenReplyUtf16 represents the minimum length
 	// of UTF16 encoded reply messages.
 	// UTF16 reply message structure:
 	//  1. message type (1 byte)
 	//  2. message id (8 bytes)
 	//  3. header padding (1 byte)
 	//  4. payload (n bytes, optional or at least 2 bytes)
-	MsgMinLenReplyUtf16 = int(10)
+	MinLenReplyUtf16 = int(10)
 
-	// MsgMinLenErrorReply represents the minimum length
+	// MinLenReplyError represents the minimum length
 	// of error reply messages.
 	// Error reply message structure:
 	//  1. message type (1 byte)
@@ -75,104 +75,105 @@ const (
 	//    length must correspond to the length flag
 	//  )
 	//  5. error message (n bytes, UTF8 encoded, optional)
-	MsgMinLenErrorReply = int(11)
+	MinLenReplyError = int(11)
 
-	// MsgMinLenRestoreSession represents the minimum length
+	// MinLenRequestRestoreSession represents the minimum length
 	// of session restoration request messages.
 	// Session restoration request message structure:
 	//  1. message type (1 byte)
 	//  2. message id (8 bytes)
 	//  3. session key (n bytes, 7-bit ASCII encoded, at least 1 byte)
-	MsgMinLenRestoreSession = int(10)
+	MinLenRequestRestoreSession = int(10)
 
-	// MsgMinLenCloseSession represents the minimum length
+	// MinLenDoCloseSession represents the minimum length
 	// of session destruction request messages.
 	// Session destruction request message structure:
 	//  1. message type (1 byte)
 	//  2. message id (8 bytes)
-	MsgMinLenCloseSession = int(9)
+	MinLenDoCloseSession = int(9)
 
-	// MsgMinLenSessionCreated represents the minimum length
+	// MinLenNotifySessionCreated represents the minimum length
 	// of session creation notification messages.
 	// Session creation notification message structure:
 	//  1. message type (1 byte)
 	//  2. session key (n bytes, 7-bit ASCII encoded, at least 1 byte)
-	MsgMinLenSessionCreated = int(2)
+	MinLenNotifySessionCreated = int(2)
 
-	// MsgMinLenSessionClosed represents the minimum length
+	// MinLenNotifySessionClosed represents the minimum length
 	// of session creation notification messages.
 	// Session destruction notification message structure:
 	//  1. message type (1 byte)
-	MsgMinLenSessionClosed = int(1)
+	MinLenNotifySessionClosed = int(1)
 
-	// MsgMinLenConf represents the minimum length
+	// MinLenAcceptConf represents the minimum length
 	// of an endpoint metadata message.
 	//  1. message type (1 byte)
 	//  2. major protocol version (1 byte)
 	//  3. minor protocol version (1 byte)
 	//  4. read timeout in milliseconds (4 byte)
 	//  5. message buffer size in bytes (4 byte)
-	MsgMinLenConf = int(11)
+	//  6. sub-protocol name (0+ bytes)
+	MinLenAcceptConf = int(11)
 )
 
 const (
 	// SERVER
 
-	// MsgErrorReply is sent by the server
-	// and represents an error-reply to a previously sent request
-	MsgErrorReply = byte(0)
+	// MsgReplyError is a request reply sent only by the server and represents
+	// an error-reply to a previously sent request
+	MsgReplyError = byte(0)
 
-	// MsgReplyShutdown is sent by the server when a request is received
-	// during server shutdown and can't therefore be processed
+	// MsgReplyShutdown is a request reply sent only by the server when a
+	// request is received during server shutdown and can't therefore be
+	// processed
 	MsgReplyShutdown = byte(1)
 
-	// MsgInternalError is sent by the server if an unexpected internal error
-	// arose during the processing of a request
-	MsgInternalError = byte(2)
+	// MsgReplyInternalError is a request reply sent only by the server if an
+	// unexpected internal error arose during the processing of a request
+	MsgReplyInternalError = byte(2)
 
-	// MsgSessionNotFound is sent by the server in response to an unfulfilled
-	// session restoration request due to the session not being found
-	MsgSessionNotFound = byte(3)
+	// MsgReplySessionNotFound is a session restoration request reply sent only
+	// by the server when the requested session was not found
+	MsgReplySessionNotFound = byte(3)
 
-	// MsgMaxSessConnsReached is sent by the server in response to
-	// an authentication request when the maximum number
-	// of concurrent connections for a certain session was reached
-	MsgMaxSessConnsReached = byte(4)
+	// MsgReplyMaxSessConnsReached is session restoration request reply sent
+	// only by the server when the maximum number of concurrent connections for
+	// a the requested session was reached
+	MsgReplyMaxSessConnsReached = byte(4)
 
-	// MsgSessionsDisabled is sent by the server in response to
-	// a session restoration request
-	// if sessions are disabled for the target server
-	MsgSessionsDisabled = byte(5)
+	// MsgReplySessionsDisabled is session restoration request reply sent only
+	// by the server when sessions are disabled
+	MsgReplySessionsDisabled = byte(5)
 
-	// MsgSessionCreated is sent by the server
-	// to notify the client about the session creation
-	MsgSessionCreated = byte(21)
+	// MsgNotifySessionCreated is a notification signal sent only by the server
+	// to notify the client about the creation of a session
+	MsgNotifySessionCreated = byte(21)
 
-	// MsgSessionClosed is sent by the server
-	// to notify the client about the session destruction
-	MsgSessionClosed = byte(22)
+	// MsgNotifySessionClosed is a notification signal sent only by the server
+	// to notify the client about the closure of the currently active session
+	MsgNotifySessionClosed = byte(22)
 
-	// MsgConf is sent by the server right after the handshake and includes
-	// the server exposed configurations
-	MsgConf = byte(23)
+	// MsgAcceptConf is a connection approval push-message sent only by the
+	// server right after the handshake and includes the server configurations
+	MsgAcceptConf = byte(23)
 
 	// CLIENT
 
-	// MsgCloseSession is sent by the client
-	// and represents a request for the destruction
-	// of the currently active session
-	MsgCloseSession = byte(31)
+	// MsgRequestCloseSession is session closure command sent only by the client to
+	// make the server close the currently active session
+	MsgRequestCloseSession = byte(31)
 
-	// MsgRestoreSession is sent by the client
-	// to request session restoration
-	MsgRestoreSession = byte(32)
+	// MsgRequestRestoreSession is a session restoration request sent only by
+	// the client
+	MsgRequestRestoreSession = byte(32)
 
-	// MsgHeartbeat is sent by the client to acknowledge the server about the
-	// activity of the connection to prevent it from shutting the connection
+	// MsgHeartbeat is sent only by the client to acknowledge the server about
+	// the activity of the connection to prevent it from shutting the connection
 	// down on read timeout
 	MsgHeartbeat = byte(33)
 
 	// SIGNAL
+
 	// Signals are sent by both the client and the server
 	// and represents a one-way signal message that doesn't require a reply
 
@@ -212,10 +213,11 @@ const (
 	MsgReplyUtf16 = byte(193)
 )
 
-// ServerConfiguration represents the MsgConf payload data
+// ServerConfiguration represents the MsgAcceptConf payload data
 type ServerConfiguration struct {
 	MajorProtocolVersion byte
 	MinorProtocolVersion byte
+	SubProtocolName      []byte
 	ReadTimeout          time.Duration
 	MessageBufferSize    uint32
 }
@@ -229,7 +231,7 @@ type Message struct {
 	MsgName            []byte
 	MsgPayload         pld.Payload
 
-	// ServerConfiguration is only initialized for MsgConf type messages
+	// ServerConfiguration is only initialized for MsgAcceptConf type messages
 	ServerConfiguration ServerConfiguration
 
 	onClose func()
@@ -239,9 +241,9 @@ type Message struct {
 // otherwise returns false.
 func (msg *Message) RequiresReply() bool {
 	switch msg.MsgType {
-	case MsgCloseSession:
+	case MsgRequestCloseSession:
 		fallthrough
-	case MsgRestoreSession:
+	case MsgRequestRestoreSession:
 		fallthrough
 	case MsgRequestBinary:
 		fallthrough
