@@ -11,8 +11,8 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
+	webwire "github.com/qbeon/webwire-go"
 	"github.com/qbeon/webwire-go/message"
-	"github.com/qbeon/webwire-go/wwrerr"
 )
 
 // Socket implements the webwire.Socket interface using
@@ -54,7 +54,7 @@ func (sock *Socket) Dial(deadline time.Time) (err error) {
 	connection, _, err := sock.dialer.Dial(sock.serverAddr.String(), nil)
 	if err != nil {
 		sock.lock.Unlock()
-		return wwrerr.DisconnectedErr{
+		return webwire.ErrDisconnected{
 			Cause: fmt.Errorf("dial failure: %s", err),
 		}
 	}
@@ -88,7 +88,7 @@ func (sock *Socket) GetWriter() (io.WriteCloser, error) {
 	// Check connection status
 	if !sock.IsConnected() {
 		sock.writeLock.Unlock()
-		return nil, wwrerr.DisconnectedErr{
+		return nil, webwire.ErrDisconnected{
 			Cause: fmt.Errorf("can't write to a closed socket"),
 		}
 	}
@@ -106,50 +106,50 @@ func (sock *Socket) GetWriter() (io.WriteCloser, error) {
 func (sock *Socket) Read(
 	msg *message.Message,
 	deadline time.Time,
-) wwrerr.SockReadErr {
+) webwire.ErrSockRead {
 	sock.readLock.Lock()
 
 	// Check connection status
 	if !sock.IsConnected() {
 		sock.readLock.Unlock()
-		return SockReadErr{cause: wwrerr.DisconnectedErr{
+		return ErrSockRead{cause: webwire.ErrDisconnected{
 			Cause: fmt.Errorf("can't read closed socket"),
 		}}
 	}
 
 	if err := sock.conn.SetReadDeadline(deadline); err != nil {
 		sock.readLock.Unlock()
-		return SockReadErr{cause: errors.New("couldn't set read deadline")}
+		return ErrSockRead{cause: errors.New("couldn't set read deadline")}
 	}
 	messageType, reader, err := sock.conn.NextReader()
 	if err != nil {
 		sock.Close()
 		sock.readLock.Unlock()
-		return SockReadErr{cause: err}
+		return ErrSockRead{cause: err}
 	}
 
 	// Stop deadline timer
 	if err := sock.conn.SetReadDeadline(time.Time{}); err != nil {
 		sock.readLock.Unlock()
-		return SockReadErr{cause: err}
+		return ErrSockRead{cause: err}
 	}
 
 	// Discard message in case of unexpected message types
 	if messageType != websocket.BinaryMessage {
 		io.Copy(ioutil.Discard, reader)
 		sock.readLock.Unlock()
-		return SockReadWrongMsgTypeErr{messageType: messageType}
+		return ErrSockReadWrongMsgType{messageType: messageType}
 	}
 
 	// Try to read the socket into the buffer
 	typeParsed, err := msg.Read(reader)
 	if err != nil {
 		sock.readLock.Unlock()
-		return SockReadErr{cause: err}
+		return ErrSockRead{cause: err}
 	}
 	if !typeParsed {
 		sock.readLock.Unlock()
-		return SockReadErr{cause: errors.New("no message type")}
+		return ErrSockRead{cause: errors.New("no message type")}
 	}
 
 	sock.readLock.Unlock()

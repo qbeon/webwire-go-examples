@@ -8,8 +8,8 @@ import (
 	"time"
 
 	wwr "github.com/qbeon/webwire-go"
+	wwrclt "github.com/qbeon/webwire-go-client"
 	wwrgorilla "github.com/qbeon/webwire-go-gorilla"
-	wwrclt "github.com/qbeon/webwire-go/client"
 )
 
 var serverAddr = flag.String("addr", ":8081", "server address")

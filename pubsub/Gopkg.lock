@@ -2,14 +2,6 @@
 
 
 [[projects]]
-  digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
-  name = "github.com/davecgh/go-spew"
-  packages = ["spew"]
-  pruneopts = "UT"
-  revision = "8991bc29aa16c548c550c7ff78260e27b9ab7c73"
-  version = "v1.1.1"
-
-[[projects]]
   digest = "1:7b5c6e2eeaa9ae5907c391a91c132abfd5c9e8a784a341b5625e750c67e6825d"
   name = "github.com/gorilla/websocket"
   packages = ["."]
@@ -18,63 +10,49 @@
   version = "v1.4.0"
 
 [[projects]]
-  digest = "1:0028cb19b2e4c3112225cd871870f2d9cf49b9b4276531f03438a88e94be86fe"
-  name = "github.com/pmezard/go-difflib"
-  packages = ["difflib"]
-  pruneopts = "UT"
-  revision = "792786c7400a136282c1664665ae0a8db921c6c2"
-  version = "v1.0.0"
-
-[[projects]]
   branch = "master"
-  digest = "1:bb0acbc2be9aa30115d73897cc0ad6f3a830a924456891679c707e78976a094c"
+  digest = "1:c0f4e25bdbb870ca7543d41658006bf062acb1ea5544821a92df1723bc5ec936"
   name = "github.com/qbeon/webwire-go"
   packages = [
     ".",
-    "client",
-    "connopt",
     "message",
     "payload",
     "requestManager",
-    "wwrerr",
   ]
   pruneopts = "UT"
-  revision = "9ab03dd58a5a534710527dbf16e4dedafe365e33"
+  revision = "f99345781010a12e764dbe5c81497ee311b84fb8"
 
 [[projects]]
   branch = "master"
-  digest = "1:2f39664121599392f269cb6a4d88d02d02492c72ac6469e05856c4d730fdda19"
+  digest = "1:a23ce814a8da162045a74885dc972efd554d2bab0226dac03910078585c4cb18"
+  name = "github.com/qbeon/webwire-go-client"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "41b57e7df76a15ae15a328392f05579485e51f8e"
+
+[[projects]]
+  branch = "master"
+  digest = "1:bafc6cd27dfeb3e30be98cf81752dc0165231469ceb1edd0714f5900b284a725"
   name = "github.com/qbeon/webwire-go-gorilla"
   packages = ["."]
   pruneopts = "UT"
-  revision = "0b3d84d47233ed97f89759a5489022b3a33ca0e0"
-
-[[projects]]
-  digest = "1:c40d65817cdd41fac9aa7af8bed56927bb2d6d47e4fea566a74880f5c2b1c41e"
-  name = "github.com/stretchr/testify"
-  packages = [
-    "assert",
-    "require",
-  ]
-  pruneopts = "UT"
-  revision = "f35b8ab0b5a2cef36673838d662e249dd9c94686"
-  version = "v1.2.2"
+  revision = "eab7d1d9bbbecb49165ed6deca6ea2819ada11f0"
 
 [[projects]]
   branch = "master"
-  digest = "1:5e4d81c50cffcb124b899e4f3eabec3930c73532f0096c27f94476728ba03028"
+  digest = "1:75515eedc0dc2cb0b40372008b616fa2841d831c63eedd403285ff286c593295"
   name = "golang.org/x/sync"
   packages = ["semaphore"]
   pruneopts = "UT"
-  revision = "42b317875d0fa942474b76e1b46a6060d720ae6e"
+  revision = "37e7f081c4d4c64e13b10787722085407fe5d15f"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
     "github.com/qbeon/webwire-go",
+    "github.com/qbeon/webwire-go-client",
     "github.com/qbeon/webwire-go-gorilla",
-    "github.com/qbeon/webwire-go/client",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

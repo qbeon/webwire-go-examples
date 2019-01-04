@@ -48,7 +48,7 @@ func (srv *PubSubServer) OnRequest(
 	_ wwr.Connection,
 	_ wwr.Message,
 ) (response wwr.Payload, err error) {
-	return wwr.Payload{}, wwr.RequestErr{
+	return wwr.Payload{}, wwr.ErrRequest{
 		Code:    "REQ_NOT_SUPPORTED",
 		Message: "Requests are not supported on this server",
 	}
@@ -56,7 +56,10 @@ func (srv *PubSubServer) OnRequest(
 
 // OnClientConnected implements the webwire.ServerImplementation interface.
 // Registers a new connected client
-func (srv *PubSubServer) OnClientConnected(client wwr.Connection) {
+func (srv *PubSubServer) OnClientConnected(
+	connOpts wwr.ConnectionOptions,
+	client wwr.Connection,
+) {
 	srv.mapLock.Lock()
 	srv.connectedClients[client] = true
 	srv.mapLock.Unlock()
@@ -118,10 +121,10 @@ func main() {
 	// Setup a new webwire server instance
 	server, err := wwr.NewServer(
 		serverImpl,
-		wwr.ServerOptions{
+		wwr.ServerOptions{},
+		&wwrgorilla.Transport{
 			Host: *serverAddr,
 		},
-		&wwrgorilla.Transport{},
 	)
 	if err != nil {
 		panic(fmt.Errorf("Failed setting up WebWire server: %s", err))

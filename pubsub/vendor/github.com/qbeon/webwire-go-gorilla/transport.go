@@ -9,7 +9,6 @@ import (
 
 	"github.com/gorilla/websocket"
 	wwr "github.com/qbeon/webwire-go"
-	"github.com/qbeon/webwire-go/connopt"
 )
 
 // TLS represents TLS configuration
@@ -36,7 +35,7 @@ type Transport struct {
 	BeforeUpgrade func(
 		resp http.ResponseWriter,
 		req *http.Request,
-	) connopt.ConnectionOptions
+	) wwr.ConnectionOptions
 
 	// WarnLog defines the warn logging output target
 	WarnLog *log.Logger

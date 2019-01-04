@@ -3,7 +3,7 @@ package gorilla
 import (
 	"net/http"
 
-	"github.com/qbeon/webwire-go/connopt"
+	"github.com/qbeon/webwire-go"
 )
 
 func (srv *Transport) handleAccept(
@@ -25,16 +25,19 @@ func (srv *Transport) handleAccept(
 		return
 	}
 
-	connectionOptions := connopt.ConnectionOptions{
-		Connection:       connopt.Accept,
+	connectionOptions := webwire.ConnectionOptions{
+		Connection:       webwire.Accept,
 		ConcurrencyLimit: 0,
+		Info: map[int]interface{}{
+			0: []byte(req.UserAgent()),
+		},
 	}
 	if srv.BeforeUpgrade != nil {
 		connectionOptions = srv.BeforeUpgrade(resp, req)
 	}
 
 	// Abort connection establishment if the connection was refused
-	if connectionOptions.Connection != connopt.Accept {
+	if connectionOptions.Connection != webwire.Accept {
 		return
 	}
 
@@ -51,9 +54,5 @@ func (srv *Transport) handleAccept(
 		return
 	}
 
-	srv.handleConnection(
-		connectionOptions,
-		[]byte(req.UserAgent()),
-		conn,
-	)
+	srv.handleConnection(connectionOptions, conn)
 }

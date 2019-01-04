@@ -1,12 +1,10 @@
 package message
 
-import (
-	"errors"
-)
+import "errors"
 
-// parseCloseSession parses MsgCloseSession messages
+// parseCloseSession parses MsgRequestCloseSession messages
 func (msg *Message) parseCloseSession() error {
-	if msg.MsgBuffer.len != MsgMinLenCloseSession {
+	if msg.MsgBuffer.len != MinLenDoCloseSession {
 		return errors.New(
 			"invalid session destruction request message, too short",
 		)
