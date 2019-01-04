@@ -2,21 +2,21 @@ package webwire
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net"
 	"sync"
 	"time"
 
 	"github.com/qbeon/webwire-go/message"
-	"github.com/qbeon/webwire-go/wwrerr"
 	"golang.org/x/sync/semaphore"
 )
 
-// ClientInfo represents basic information about a client connection
-type ClientInfo struct {
-	ConnectionTime time.Time
-	UserAgent      []byte
-	RemoteAddr     net.Addr
+// info represents basic information about a client connection
+type info struct {
+	Options    ConnectionOptions
+	Creation   time.Time
+	RemoteAddr net.Addr
 }
 
 // connection represents a connected client connected to the server
@@ -47,13 +47,12 @@ type connection struct {
 	session *Session
 
 	// info represents overall connection information
-	info ClientInfo
+	info info
 }
 
 // newConnection creates and returns a new client connection instance
 func newConnection(
 	socket Socket,
-	userAgent []byte,
 	srv *server,
 	options ConnectionOptions,
 ) *connection {
@@ -76,10 +75,10 @@ func newConnection(
 		sock:         socket,
 		sessionLock:  sync.RWMutex{},
 		session:      nil,
-		info: ClientInfo{
-			time.Now(),
-			userAgent,
-			remoteAddr,
+		info: info{
+			Options:    options,
+			Creation:   time.Now(),
+			RemoteAddr: remoteAddr,
 		},
 	}
 }
@@ -140,12 +139,36 @@ func (con *connection) unlink() {
 }
 
 // Info implements the Connection interface
-func (con *connection) Info() ClientInfo {
-	return con.info
+func (con *connection) Info(key int) interface{} {
+	if con.info.Options.Info == nil {
+		return nil
+	}
+	return con.info.Options.Info[key]
+}
+
+// Creation implements the Connection interface
+func (con *connection) Creation() time.Time {
+	return con.info.Creation
+}
+
+// RemoteAddr implements the Connection interface
+func (con *connection) RemoteAddr() net.Addr {
+	return con.info.RemoteAddr
 }
 
 // Signal implements the Connection interface
 func (con *connection) Signal(name []byte, payload Payload) (err error) {
+	// Require either a name, or a payload or both
+	if len(name) < 1 && len(payload.Data) < 1 {
+		return ErrProtocol{Cause: errors.New("missing both name and payload")}
+	}
+
+	// Ensure the message won't exceed the buffer size
+	if uint32(message.CalcMsgLenSignal(name, payload.Encoding, payload.Data)) >
+		con.srv.options.MessageBufferSize {
+		return ErrBufferOverflow{}
+	}
+
 	writer, err := con.sock.GetWriter()
 	if err != nil {
 		return err
@@ -163,11 +186,11 @@ func (con *connection) Signal(name []byte, payload Payload) (err error) {
 // CreateSession implements the Connection interface
 func (con *connection) CreateSession(attachment SessionInfo) error {
 	if !con.srv.sessionsEnabled {
-		return wwrerr.SessionsDisabledErr{}
+		return ErrSessionsDisabled{}
 	}
 
 	if !con.sock.IsConnected() {
-		return wwrerr.DisconnectedErr{
+		return ErrDisconnected{
 			Cause: fmt.Errorf(
 				"Can't create session on disconnected connection",
 			),
@@ -236,7 +259,7 @@ func (con *connection) notifySessionCreated(newSession *Session) error {
 	if err != nil {
 		return err
 	}
-	return message.WriteMsgSessionCreated(
+	return message.WriteMsgNotifySessionCreated(
 		writer,
 		encodedSessionInfo,
 	)
@@ -248,13 +271,13 @@ func (con *connection) notifySessionClosed() error {
 	if err != nil {
 		return err
 	}
-	return message.WriteMsgSessionClosed(writer)
+	return message.WriteMsgNotifySessionClosed(writer)
 }
 
 // CloseSession implements the Connection interface
 func (con *connection) CloseSession() error {
 	if !con.srv.sessionsEnabled {
-		return wwrerr.SessionsDisabledErr{}
+		return ErrSessionsDisabled{}
 	}
 
 	con.sessionLock.Lock()

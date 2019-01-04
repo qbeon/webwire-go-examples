@@ -6,9 +6,9 @@ import (
 	pld "github.com/qbeon/webwire-go/payload"
 )
 
-// parseSessionCreated parses MsgSessionCreated messages
+// parseSessionCreated parses MsgNotifySessionCreated messages
 func (msg *Message) parseSessionCreated() error {
-	if msg.MsgBuffer.len < MsgMinLenSessionCreated {
+	if msg.MsgBuffer.len < MinLenNotifySessionCreated {
 		return errors.New(
 			"invalid session creation notification message, too short",
 		)

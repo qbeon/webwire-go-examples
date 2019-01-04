@@ -2,7 +2,6 @@ package webwire
 
 import (
 	"github.com/qbeon/webwire-go/message"
-	"github.com/qbeon/webwire-go/wwrerr"
 )
 
 // failMsg fails the message returning an error reply
@@ -28,8 +27,8 @@ func (srv *server) failMsg(
 	}
 
 	switch err := reqErr.(type) {
-	case wwrerr.RequestErr:
-		if err := message.WriteMsgErrorReply(
+	case ErrRequest:
+		if err := message.WriteMsgReplyError(
 			writer,
 			msg.MsgIdentifierBytes,
 			[]byte(err.Code),
@@ -39,8 +38,8 @@ func (srv *server) failMsg(
 			srv.errorLog.Println("couldn't write error reply message: ", err)
 			return
 		}
-	case *wwrerr.RequestErr:
-		if err := message.WriteMsgErrorReply(
+	case *ErrRequest:
+		if err := message.WriteMsgReplyError(
 			writer,
 			msg.MsgIdentifierBytes,
 			[]byte(err.Code),
@@ -50,10 +49,10 @@ func (srv *server) failMsg(
 			srv.errorLog.Println("couldn't write error reply message: ", err)
 			return
 		}
-	case wwrerr.MaxSessConnsReachedErr:
+	case ErrMaxSessConnsReached:
 		if err := message.WriteMsgSpecialRequestReply(
 			writer,
-			message.MsgMaxSessConnsReached,
+			message.MsgReplyMaxSessConnsReached,
 			msg.MsgIdentifierBytes,
 		); err != nil {
 			srv.errorLog.Println(
@@ -62,10 +61,10 @@ func (srv *server) failMsg(
 			)
 			return
 		}
-	case wwrerr.SessionNotFoundErr:
+	case ErrSessionNotFound:
 		if err := message.WriteMsgSpecialRequestReply(
 			writer,
-			message.MsgSessionNotFound,
+			message.MsgReplySessionNotFound,
 			msg.MsgIdentifierBytes,
 		); err != nil {
 			srv.errorLog.Println(
@@ -74,10 +73,10 @@ func (srv *server) failMsg(
 			)
 			return
 		}
-	case wwrerr.SessionsDisabledErr:
+	case ErrSessionsDisabled:
 		if err := message.WriteMsgSpecialRequestReply(
 			writer,
-			message.MsgSessionsDisabled,
+			message.MsgReplySessionsDisabled,
 			msg.MsgIdentifierBytes,
 		); err != nil {
 			srv.errorLog.Println(
@@ -89,7 +88,7 @@ func (srv *server) failMsg(
 	default:
 		if err := message.WriteMsgSpecialRequestReply(
 			writer,
-			message.MsgInternalError,
+			message.MsgReplyInternalError,
 			msg.MsgIdentifierBytes,
 		); err != nil {
 			srv.errorLog.Println(

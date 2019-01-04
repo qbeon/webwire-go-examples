@@ -27,7 +27,11 @@ func (srv *EchoServer) OnSignal(
 
 // OnClientConnected implements the webwire.ServerImplementation interface.
 // Does nothing, not needed in this example
-func (srv *EchoServer) OnClientConnected(client wwr.Connection) {}
+func (srv *EchoServer) OnClientConnected(
+	connectionOptions wwr.ConnectionOptions,
+	client wwr.Connection,
+) {
+}
 
 // OnClientDisconnected implements the webwire.ServerImplementation interface
 // Does nothing, not needed in this example
@@ -40,7 +44,7 @@ func (srv *EchoServer) OnRequest(
 	client wwr.Connection,
 	message wwr.Message,
 ) (response wwr.Payload, err error) {
-	log.Printf("Replied to client: %s", client.Info().RemoteAddr)
+	log.Printf("Replied to client: %s", client.RemoteAddr())
 
 	// Reply to the request using the same data and encoding
 	return wwr.Payload{
@@ -58,10 +62,10 @@ func main() {
 	// Setup a new webwire server instance
 	server, err := wwr.NewServer(
 		&EchoServer{},
-		wwr.ServerOptions{
+		wwr.ServerOptions{},
+		&wwrgorilla.Transport{
 			Host: *serverAddr,
 		},
-		&wwrgorilla.Transport{},
 	)
 	if err != nil {
 		panic(fmt.Errorf("Failed setting up WebWire server: %s", err))

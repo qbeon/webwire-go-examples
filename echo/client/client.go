@@ -9,8 +9,8 @@ import (
 	"time"
 
 	wwr "github.com/qbeon/webwire-go"
+	wwrclt "github.com/qbeon/webwire-go-client"
 	wwrgorilla "github.com/qbeon/webwire-go-gorilla"
-	wwrclt "github.com/qbeon/webwire-go/client"
 )
 
 // EchoClient implements the wwrclt.Implementation interface

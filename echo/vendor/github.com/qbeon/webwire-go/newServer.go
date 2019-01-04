@@ -9,8 +9,7 @@ import (
 	"github.com/qbeon/webwire-go/message"
 )
 
-// NewServer creates a new WebWire server instance which uses a
-// fasthttp/websocket transport by default
+// NewServer creates a new webwire server instance
 func NewServer(
 	implementation ServerImplementation,
 	opts ServerOptions,
@@ -34,12 +33,13 @@ func NewServer(
 	}
 
 	// Prepare the configuration push message for the webwire accept handshake
-	configMsg, err := message.NewConfMessage(
+	configMsg, err := message.NewAcceptConfMessage(
 		message.ServerConfiguration{
 			MajorProtocolVersion: 2,
 			MinorProtocolVersion: 0,
 			ReadTimeout:          opts.ReadTimeout,
 			MessageBufferSize:    opts.MessageBufferSize,
+			SubProtocolName:      opts.SubProtocolName,
 		},
 	)
 	if err != nil {
