@@ -68,7 +68,7 @@ MAINLOOP:
 		case ":disconnect":
 			clt.connection.Close()
 		case ":connect":
-			if err := clt.connection.Connect(); err != nil {
+			if err := clt.connection.Connect(context.Background()); err != nil {
 				fmt.Printf("Error while connecting: %s\n", err)
 			}
 		default:

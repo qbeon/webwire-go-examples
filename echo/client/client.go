@@ -96,6 +96,11 @@ func main() {
 		panic(err)
 	}
 
+	// Establish a connection to the server
+	if err := echoClient.connection.Connect(context.Background()); err != nil {
+		log.Fatalf("Couldn't establish a connection: %s", err)
+	}
+
 	// Send request and await reply
 	reply := echoClient.Request("hey, server!")
 

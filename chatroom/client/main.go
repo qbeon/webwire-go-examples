@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/pem"
@@ -96,6 +97,9 @@ func NewChatroomClient(serverAddr url.URL) (*ChatroomClient, error) {
 				"ERR: ",
 				log.Ldate|log.Ltime|log.Lshortfile,
 			),
+
+			// Define the sub-protocol name to be able to connect to the server
+			SubProtocolName: []byte("chatroom-example-protocol"),
 		},
 		&wwrgorilla.ClientTransport{
 			ServerAddress: serverAddr,
@@ -126,11 +130,20 @@ func main() {
 		Path:   "/",
 	}
 
-	fmt.Printf("Connecting to %s\n", serverAddr.String())
+	// Initialize client
 	chatroomClient, err := NewChatroomClient(serverAddr)
 	if err != nil {
 		panic(err)
 	}
+
+	// Establish a connection to the server
+	fmt.Printf("Connecting to %s...\n", serverAddr.String())
+	if err := chatroomClient.connection.Connect(
+		context.Background(),
+	); err != nil {
+		log.Fatalf("Couldn't connect to the server: %s", err)
+	}
+	fmt.Println("Connected successfully!")
 
 	// Authenticate if credentials are already provided from the CLI
 	if *username != "" && *password != "" {

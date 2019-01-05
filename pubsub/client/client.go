@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"log"
 	"net/url"
@@ -92,6 +93,11 @@ func main() {
 	client, err := NewPubSubClient(url.URL{Host: *serverAddr}, *counterTarget)
 	if err != nil {
 		panic(err)
+	}
+
+	// Establish a connection to the server
+	if err := client.connection.Connect(context.Background()); err != nil {
+		log.Fatalf("Couldn't establish a connection: %s", err)
 	}
 
 	// Wait until N signals are received before disconnecting
