@@ -32,7 +32,7 @@ func NewChatRoomServer() *ChatRoomServer {
 
 // broadcastMessage sends a message on behalf of the given user
 // to all connected clients
-func (srv *ChatRoomServer) broadcastMessage(name string, msg []byte) {
+func (srv *ChatRoomServer) broadcastMessage(name string, msg string) {
 	// Marshal message
 	encoded, err := json.Marshal(shared.ChatMessage{
 		User: name,
@@ -164,7 +164,7 @@ func (srv *ChatRoomServer) handleMessage(
 		name = client.SessionInfo("username").(string)
 	}
 
-	srv.broadcastMessage(name, msgStr)
+	srv.broadcastMessage(name, string(msgStr))
 
 	return wwr.Payload{}, nil
 }
